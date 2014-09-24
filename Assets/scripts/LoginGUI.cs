@@ -15,6 +15,8 @@ public class LoginGUI : MonoBehaviour {
 	public Texture2D pomelo;
 	public GUISkin pomeloSkin; 
 	public GUIStyle pomeloStyle;
+
+	private bool canEntry = false;
 	
  	void Start() 
     {	
@@ -24,11 +26,18 @@ public class LoginGUI : MonoBehaviour {
 	
 	//When quit, release resource
 	void Update(){
-		if(Input.GetKey(KeyCode.Escape)) {
+		if(Input.GetKey(KeyCode.Escape)) 
+		{
 			if (pc != null) {
 				pc.disconnect();
 			}
 			Application.Quit();
+		}
+
+		if(canEntry) 
+		{
+			Application.LoadLevel(Application.loadedLevel + 1);
+			canEntry = false;
 		}
 	}
 	
@@ -72,7 +81,9 @@ public class LoginGUI : MonoBehaviour {
 		if (pc != null) {
 			pc.request("connector.entryHandler.enter", userMessage, (data)=>{
 				users = data;
-				Application.LoadLevel(Application.loadedLevel + 1);
+				//Application.LoadLevel(Application.loadedLevel + 1);
+				canEntry = true;
+
 			});
 		}
 	}
